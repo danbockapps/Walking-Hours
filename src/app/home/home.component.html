@@ -3,5 +3,5 @@
 </ActionBar>
 
 <StackLayout orientation="vertical">
-  <Label *ngFor="let hour of hours" [text]="hour.toDate()"></Label>
+  <walk-hour *ngFor="let hour of hours" [momentObj]="hour"></walk-hour>
 </StackLayout>
