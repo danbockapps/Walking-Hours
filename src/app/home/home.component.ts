@@ -1,17 +1,29 @@
 import { Component, OnInit } from "@angular/core";
+import { Pedometer } from "nativescript-pedometer";
+import * as moment from 'moment';
+import { Moment } from 'moment';
 
 @Component({
-    selector: "Home",
-    moduleId: module.id,
-    templateUrl: "./home.component.html"
+  selector: "Home",
+  moduleId: module.id,
+  templateUrl: "./home.component.html"
 })
 export class HomeComponent implements OnInit {
+  hours: Array<Moment>;
 
-    constructor() {
-        // Use the component constructor to inject providers.
-    }
+  constructor() {}
 
-    ngOnInit(): void {
-        // Init your component properties here.
+  ngOnInit(): void {
+    let pedometer = new Pedometer();
+    pedometer.isStepCountingAvailable().then(avail => {
+      console.log(`Step counting is available: ${avail}`);
+    });
+
+    let startOfDay: Moment = moment().startOf('day');
+    this.hours = new Array();
+
+    for(let i=0; i<24; i++) {
+      this.hours[i] = moment(startOfDay).add(i, 'hours');
     }
+  }
 }
