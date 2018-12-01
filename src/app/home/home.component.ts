@@ -9,7 +9,8 @@ import { Moment } from 'moment';
   templateUrl: "./home.component.html"
 })
 export class HomeComponent implements OnInit {
-  hours: Array<Moment>;
+  // This is an array of tuples. Google TypeScript tuples.
+  stepHours: Array<[Moment, number]>;
 
   constructor() {}
 
@@ -20,10 +21,16 @@ export class HomeComponent implements OnInit {
     });
 
     let startOfDay: Moment = moment().startOf('day');
-    this.hours = new Array();
+    this.stepHours = new Array();
 
     for(let i=0; i<24; i++) {
-      this.hours[i] = moment(startOfDay).add(i, 'hours');
+      let momentObj: Moment = moment(startOfDay).add(i, 'hours');
+      pedometer.query({
+        fromDate: momentObj.toDate(),
+        toDate: moment(momentObj).add(1, 'hours').toDate()
+      }).then(result => {
+        this.stepHours[i] = [momentObj, result.steps];
+      })
     }
   }
 }

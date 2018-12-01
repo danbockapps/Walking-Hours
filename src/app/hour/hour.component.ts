@@ -11,7 +11,8 @@ import { Moment } from 'moment';
 })
 
 export class HourComponent implements OnInit {
-	@Input() momentObj: Moment;	
+	// This is called a tuple. Google TypeScript tuples.
+	@Input() stepHour: [Moment, number];	
 
 	constructor() { }
 
