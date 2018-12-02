@@ -1,5 +1,6 @@
-<StackLayout orientation="horizontal">
-  <Label class="hour" [text]="stepHour[0].format('h a')" width="40%" background="orange"></Label>
-  <Label width="20%" background="brown"></Label>
-  <Label class="hour" [text]="stepString" width="40%" [background]="getBackgroundColor()"></Label>
-</StackLayout>
+<GridLayout columns="*, *, *">
+  <Label colSpan="3" [background]="getBackgroundColor()"></Label>
+  <Label col="0" class="hour" [text]="stepHour[0].format('ha')"></Label>
+  <Label col="1" class="emoji" text="🚡"></Label>
+  <Label col="2" class="steps" [text]="stepString"></Label>
+</GridLayout>

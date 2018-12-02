@@ -1,6 +1,6 @@
 {
   "nativescript": {
-    "id": "org.nativescript.WalkingHours",
+    "id": "net.danbock.WalkingHours",
     "tns-android": {
       "version": "5.0.0"
     },

@@ -35,7 +35,12 @@ export class HomeComponent implements OnInit {
   }
 
   rowNum(stepHour: [Moment, number]): number {
-    let returnable: number = parseInt(stepHour[0].format('H'));
+    let returnable: number = parseInt(stepHour[0].format('H')) % 12;
     return returnable;
+  }
+
+  colNum(stepHour: [Moment, number]): number {
+    // Columns 0 and 2 are for hours. Column 1 is the center divider.
+    return stepHour[0].format('a') === 'am' ? 0 : 2;
   }
 }

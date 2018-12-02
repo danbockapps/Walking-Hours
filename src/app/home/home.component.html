@@ -1,9 +1,12 @@
 <ActionBar class="action-bar">
-  <Label class="action-bar-title" text="Home"></Label>
+  <Label class="action-bar-title" text="Walking Hours"></Label>
 </ActionBar>
 
-<GridLayout rows="*, *, *, *, *, *, *, *, *, *, *, *, *, *, *, *, *, *, *, *, *, *, *, *" columns="*">
-  <StackLayout *ngFor="let stepHour of stepHours" [row]="rowNum(stepHour)">
+<GridLayout rows="*, *, *, *, *, *, *, *, *, *, *, *" columns="*, 1, *">
+  <StackLayout *ngFor="let stepHour of stepHours" [row]="rowNum(stepHour)" [col]="colNum(stepHour)">
     <walk-hour [stepHour]="stepHour"></walk-hour>
   </StackLayout>
+
+  <!-- Center divider -->
+  <Label rowSpan="12" col="1" backgroundColor="black"></Label>
 </GridLayout>
