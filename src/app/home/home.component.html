@@ -2,6 +2,8 @@
   <Label class="action-bar-title" text="Home"></Label>
 </ActionBar>
 
-<StackLayout orientation="vertical">
-  <walk-hour *ngFor="let stepHour of stepHours" [stepHour]="stepHour"></walk-hour>
-</StackLayout>
+<GridLayout rows="*, *, *, *, *, *, *, *, *, *, *, *, *, *, *, *, *, *, *, *, *, *, *, *" columns="*">
+  <StackLayout *ngFor="let stepHour of stepHours" [row]="rowNum(stepHour)">
+    <walk-hour [stepHour]="stepHour"></walk-hour>
+  </StackLayout>
+</GridLayout>

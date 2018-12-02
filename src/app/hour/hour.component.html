@@ -1,1 +1,5 @@
-<Label class="hour" [text]="stepHour[0] + ' --- ' + stepHour[1]"></Label>
+<StackLayout orientation="horizontal">
+  <Label class="hour" [text]="stepHour[0].format('h a')" width="40%" background="orange"></Label>
+  <Label width="20%" background="brown"></Label>
+  <Label class="hour" [text]="stepString" width="40%" [background]="getBackgroundColor()"></Label>
+</StackLayout>

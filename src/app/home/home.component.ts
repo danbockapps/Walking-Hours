@@ -33,4 +33,9 @@ export class HomeComponent implements OnInit {
       })
     }
   }
+
+  rowNum(stepHour: [Moment, number]): number {
+    let returnable: number = parseInt(stepHour[0].format('H'));
+    return returnable;
+  }
 }

@@ -12,9 +12,17 @@ import { Moment } from 'moment';
 
 export class HourComponent implements OnInit {
 	// This is called a tuple. Google TypeScript tuples.
-	@Input() stepHour: [Moment, number];	
+	@Input() stepHour: [Moment, number];
+	stepString: string;
 
 	constructor() { }
 
-	ngOnInit() { }
+	ngOnInit() {
+		// For some reason it doesn't work to do this directly in the html.
+		this.stepString = new Intl.NumberFormat().format(this.stepHour[1]);
+	}
+
+	getBackgroundColor(): string {
+		return this.stepHour[1] >= 450 ? "green" : "white";
+	}
 }
