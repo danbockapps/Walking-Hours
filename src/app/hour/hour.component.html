@@ -1,6 +1,6 @@
 <GridLayout columns="*, *, *">
   <Label colSpan="3" [background]="getBackgroundColor()"></Label>
   <Label col="0" class="hour" [text]="stepHour[0].format('ha')"></Label>
-  <Label col="1" class="emoji" text="🚡"></Label>
+  <Emoji:Emoji col="1" class="emoji" [name]="getEmojiShortName()" />
   <Label col="2" class="steps" [text]="stepString"></Label>
 </GridLayout>

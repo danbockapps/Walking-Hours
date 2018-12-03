@@ -4,8 +4,7 @@
 }
 
 .emoji {
-  text-align: center;
-  font-size: 30;
+  horizontal-align: center;
 }
 
 .steps {
