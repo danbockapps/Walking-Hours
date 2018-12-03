@@ -4,6 +4,7 @@ import { NativeScriptCommonModule } from "nativescript-angular/common";
 import { HomeRoutingModule } from "./home-routing.module";
 import { HomeComponent } from "./home.component";
 import { HourComponent } from "../hour/hour.component";
+import { DatabaseService } from "../database/database.service";
 
 @NgModule({
     imports: [
@@ -16,6 +17,9 @@ import { HourComponent } from "../hour/hour.component";
     ],
     schemas: [
         NO_ERRORS_SCHEMA
+    ],
+    providers: [
+        DatabaseService
     ]
 })
 export class HomeModule { }

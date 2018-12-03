@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Moment } from 'moment';
 import { registerElement } from "nativescript-angular/element-registry";
 import moment = require('moment');
+import { DatabaseService } from '../database/database.service';
 registerElement("Emoji", () => require("nativescript-emoji").Emoji);
 
 @Component({
@@ -19,7 +20,7 @@ export class HourComponent implements OnInit {
 	stepString: string;
 	futureHour: boolean;
 
-	constructor() { }
+	constructor(private databaseService: DatabaseService) { }
 
 	ngOnInit() {
 		// For some reason it doesn't work to do this directly in the html.
@@ -37,14 +38,13 @@ export class HourComponent implements OnInit {
 		return this.goalMet() ? "lightgreen" : "white";
 	}
 
-	getEmojiShortName(): string {
+	getEmoji(): string {
 		if(this.futureHour) {
 			// Future
 		  return '';
 		}
 		else if(this.goalMet()) {
-			//TODO save these on a per-hour basis so they stay the same
-			return this.getRandomHappyEmojiShortName();
+			return this.databaseService.getEmojiShortName(this.stepHour[0].format('X'));
 		}
 		else if(this.stepHour[1] <= 1) {
 			return 'zzz';
@@ -52,20 +52,5 @@ export class HourComponent implements OnInit {
 		else {
 			return 'x';
 		}
-	}
-
-	getRandomHappyEmojiShortName(): string {
-		let candidates: Array<string> = [
-			'grinning',
-			'clap',
-			'tada',
-			'cowboy',
-			'raised_hands',
-			'thumbsup',
-			'ok_hand',
-			'dancer',
-			'man_dancing'
-		];
-		return candidates[Math.floor(Math.random() * candidates.length)];
 	}
 }

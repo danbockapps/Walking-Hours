@@ -23,6 +23,7 @@
     "@angular/router": "~7.0.0",
     "moment": "^2.22.2",
     "nativescript-angular": "~7.0.0",
+    "nativescript-couchbase": "^1.0.18",
     "nativescript-emoji": "^1.1.1",
     "nativescript-exit": "^1.0.1",
     "nativescript-pedometer": "^2.1.0",
