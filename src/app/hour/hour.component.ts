@@ -2,7 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Moment } from 'moment';
 import { registerElement } from "nativescript-angular/element-registry";
 import moment = require('moment');
-import { DatabaseService } from '../database/database.service';
+import { DatabaseService } from '../services/database.service';
 registerElement("Emoji", () => require("nativescript-emoji").Emoji);
 
 @Component({

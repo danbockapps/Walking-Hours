@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
-import { Pedometer } from "nativescript-pedometer";
 import * as moment from 'moment';
 import { Moment } from 'moment';
+import { PedometerService, iOSPedometerDataPoint } from "../services/pedometer.service";
 
 @Component({
   selector: "Home",
@@ -12,26 +12,15 @@ export class HomeComponent implements OnInit {
   // This is an array of tuples. Google TypeScript tuples.
   stepHours: Array<[Moment, number]>;
 
-  constructor() {}
+  constructor(private pedometerService: PedometerService) {}
 
   ngOnInit(): void {
-    let pedometer = new Pedometer();
-    pedometer.isStepCountingAvailable().then(avail => {
-      console.log(`Step counting is available: ${avail}`);
-    });
-
-    let startOfDay: Moment = moment().startOf('day');
-    this.stepHours = new Array();
-
-    for(let i=0; i<24; i++) {
-      let momentObj: Moment = moment(startOfDay).add(i, 'hours');
-      pedometer.query({
-        fromDate: momentObj.toDate(),
-        toDate: moment(momentObj).add(1, 'hours').toDate()
-      }).then(result => {
-        this.stepHours[i] = [momentObj, result.steps];
-      })
-    }
+    this.stepHours = [];
+    this.pedometerService.queryDay(moment()).subscribe(
+      (response:iOSPedometerDataPoint) => {
+        this.stepHours.push([moment(response.startDate), response.steps]);
+      }
+    );
   }
 
   rowNum(stepHour: [Moment, number]): number {

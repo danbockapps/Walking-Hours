@@ -4,7 +4,8 @@ import { NativeScriptCommonModule } from "nativescript-angular/common";
 import { HomeRoutingModule } from "./home-routing.module";
 import { HomeComponent } from "./home.component";
 import { HourComponent } from "../hour/hour.component";
-import { DatabaseService } from "../database/database.service";
+import { DatabaseService } from "../services/database.service";
+import { PedometerService } from "../services/pedometer.service";
 
 @NgModule({
     imports: [
@@ -19,7 +20,8 @@ import { DatabaseService } from "../database/database.service";
         NO_ERRORS_SCHEMA
     ],
     providers: [
-        DatabaseService
+        DatabaseService,
+        PedometerService
     ]
 })
 export class HomeModule { }
