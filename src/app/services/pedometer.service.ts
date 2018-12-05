@@ -37,6 +37,9 @@ export class PedometerService {
           observer.next(result);
         }
       });
+
+      // This gets run when the observable is unsubscribed from
+      return () => this._pedometer.stopUpdates();
     });
   }
 }
