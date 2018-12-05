@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ChangeDetectorRef } from "@angular/core";
 import * as moment from 'moment';
 import { Moment } from 'moment';
 import { PedometerService, iOSPedometerDataPoint } from "../services/pedometer.service";
@@ -14,10 +14,12 @@ export class HomeComponent implements OnInit {
   // This is an array of tuples. Google TypeScript tuples.
   stepHours: Array<[Moment, number]>;
   private updatesSubscription: Subscription;
+  curViewDate: Date; // Midnight of the date currently being viewed
 
-  constructor(private pedometerService: PedometerService) {}
+  constructor(private pedometerService: PedometerService, private changeDetectorRef: ChangeDetectorRef) {}
 
   ngOnInit(): void {
+    this.curViewDate = moment().startOf('day').toDate();
     this.stepHours = [];
     this.pedometerService.queryDay(moment()).subscribe(
       (response:iOSPedometerDataPoint) => {
@@ -32,7 +34,15 @@ export class HomeComponent implements OnInit {
   subscribeToPedometerUpdates(): void {
     if(!this.updatesSubscription || this.updatesSubscription.closed) {
       this.updatesSubscription = this.pedometerService.startUpdates().subscribe(
-        (resp: iOSPedometerDataPoint) => console.log(resp)
+        (resp: iOSPedometerDataPoint) => {
+          this.stepHours.forEach((element: [Moment, number]) => {
+            if(element[0].isSame(moment(resp.startDate))) {
+              element[1] = resp.steps;
+              console.log(`Steps received: ${resp.steps}`);
+              this.changeDetectorRef.detectChanges();
+            }
+          });
+        }
       );
     }
   }
@@ -48,6 +58,12 @@ export class HomeComponent implements OnInit {
     
     on(resumeEvent, (args: ApplicationEventData) => {
       this.subscribeToPedometerUpdates();
+    });
+  }
+
+  todaysStepHours(curViewDate): Array<[Moment, number]> {
+    return this.stepHours.filter((element: [Moment, number]) => {
+      return moment(element[0]).startOf('day').isSame(curViewDate);
     });
   }
 

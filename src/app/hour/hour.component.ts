@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, SimpleChange } from '@angular/core';
 import { Moment } from 'moment';
 import { registerElement } from "nativescript-angular/element-registry";
 import moment = require('moment');
@@ -17,17 +17,17 @@ registerElement("Emoji", () => require("nativescript-emoji").Emoji);
 export class HourComponent implements OnInit {
 	// This is called a tuple. Google TypeScript tuples.
 	@Input() stepHour: [Moment, number];
-	stepString: string;
-	futureHour: boolean;
 
 	constructor(private databaseService: DatabaseService) { }
 
-	ngOnInit() {
-		// For some reason it doesn't work to do this directly in the html.
-		this.futureHour = parseInt(this.stepHour[0].format('H')) > parseInt(moment().format('H'));
-		if(!this.futureHour) {
-			this.stepString = new Intl.NumberFormat().format(this.stepHour[1]);
-		}
+	ngOnInit() { }
+
+	isFutureHour(): boolean {
+		return parseInt(this.stepHour[0].format('H')) > parseInt(moment().format('H'));
+	}
+
+	getStepString(): string {
+		return this.isFutureHour() ? '' : new Intl.NumberFormat().format(this.stepHour[1]);
 	}
 
 	goalMet(): boolean {
@@ -39,8 +39,7 @@ export class HourComponent implements OnInit {
 	}
 
 	getEmoji(): string {
-		if(this.futureHour) {
-			// Future
+		if(this.isFutureHour()) {
 		  return '';
 		}
 		else if(this.goalMet()) {

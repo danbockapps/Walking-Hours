@@ -3,7 +3,7 @@
 </ActionBar>
 
 <GridLayout rows="*, *, *, *, *, *, *, *, *, *, *, *" columns="*, 1, *">
-  <StackLayout *ngFor="let stepHour of stepHours" [row]="rowNum(stepHour)" [col]="colNum(stepHour)">
+  <StackLayout *ngFor="let stepHour of todaysStepHours(curViewDate)" [row]="rowNum(stepHour)" [col]="colNum(stepHour)">
     <walk-hour [stepHour]="stepHour"></walk-hour>
   </StackLayout>
 
