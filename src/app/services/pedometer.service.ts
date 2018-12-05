@@ -28,6 +28,17 @@ export class PedometerService {
 
     return merge(...obsArray);
   }
+
+  startUpdates(): Observable<iOSPedometerDataPoint> {
+    return Observable.create((observer) => {
+      this._pedometer.startUpdates({
+        fromDate: moment().startOf('hour').toDate(),
+        onUpdate: (result: iOSPedometerDataPoint) => {
+          observer.next(result);
+        }
+      });
+    });
+  }
 }
 
 export interface iOSPedometerDataPoint {

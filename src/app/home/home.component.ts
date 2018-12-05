@@ -2,6 +2,8 @@ import { Component, OnInit } from "@angular/core";
 import * as moment from 'moment';
 import { Moment } from 'moment';
 import { PedometerService, iOSPedometerDataPoint } from "../services/pedometer.service";
+import { on, suspendEvent, resumeEvent, ApplicationEventData } from 'tns-core-modules/application';
+import { Subscription } from "rxjs";
 
 @Component({
   selector: "Home",
@@ -11,6 +13,7 @@ import { PedometerService, iOSPedometerDataPoint } from "../services/pedometer.s
 export class HomeComponent implements OnInit {
   // This is an array of tuples. Google TypeScript tuples.
   stepHours: Array<[Moment, number]>;
+  private updatesSubscription: Subscription;
 
   constructor(private pedometerService: PedometerService) {}
 
@@ -21,6 +24,31 @@ export class HomeComponent implements OnInit {
         this.stepHours.push([moment(response.startDate), response.steps]);
       }
     );
+
+    this.subscribeToPedometerUpdates();
+    this.registerApplicationEvents();
+  }
+
+  subscribeToPedometerUpdates(): void {
+    if(!this.updatesSubscription || this.updatesSubscription.closed) {
+      this.updatesSubscription = this.pedometerService.startUpdates().subscribe(
+        (resp: iOSPedometerDataPoint) => console.log(resp)
+      );
+    }
+  }
+
+  unsubscribeFromPedometerUpdates(): void {
+    this.updatesSubscription.unsubscribe();
+  }
+
+  registerApplicationEvents(): void {
+    on(suspendEvent, (args: ApplicationEventData) => {
+      this.unsubscribeFromPedometerUpdates();
+    });
+    
+    on(resumeEvent, (args: ApplicationEventData) => {
+      this.subscribeToPedometerUpdates();
+    });
   }
 
   rowNum(stepHour: [Moment, number]): number {
