@@ -33,3 +33,4 @@ typings/
 !.vscode/extensions.json
 
 App_Resources/iOS/build.xcconfig
+App_Resources/iOS/GoogleService-Info.plist
