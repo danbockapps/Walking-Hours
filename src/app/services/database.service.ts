@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Couchbase } from 'nativescript-couchbase';
+import { Couchbase } from 'nativescript-couchbase-plugin';
 
 @Injectable({
 	// This makes the service a singleton
