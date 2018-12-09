@@ -1,5 +1,5 @@
 <GridLayout columns="*, *, *">
-  <Label colSpan="3" [background]="getBackgroundColor()"></Label>
+  <Label colSpan="3" class="bg" [background]="getBackgroundColor()" [width]="getWidth()"></Label>
   <Label col="0" class="hour" [text]="stepHour[0].format('ha')"></Label>
   <Emoji:Emoji col="1" class="emoji" [name]="getEmoji()" />
   <Label col="2" class="steps" [text]="getStepString()"></Label>

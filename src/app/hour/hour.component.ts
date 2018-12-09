@@ -22,20 +22,45 @@ export class HourComponent implements OnInit {
 
 	ngOnInit() { }
 
+	isCurrentHour(): boolean {
+		return parseInt(this.stepHour[0].format('H')) === parseInt(moment().format('H'));
+	}
+
 	isFutureHour(): boolean {
 		return parseInt(this.stepHour[0].format('H')) > parseInt(moment().format('H'));
 	}
 
-	getStepString(): string {
-		return this.isFutureHour() ? '' : new Intl.NumberFormat().format(this.stepHour[1]);
+	getGoal(): number {
+		return 416;
 	}
 
 	goalMet(): boolean {
-		return this.stepHour[1] >= 416;
+		return this.stepHour[1] >= this.getGoal();
+	}
+
+	getWidth(): string {
+		if(this.isCurrentHour()) {
+			return Math.min(100, this.stepHour[1] * 100 / this.getGoal()) + '%';
+		}
+		else {
+			return '100%';
+		}
 	}
 
 	getBackgroundColor(): string {
-		return this.goalMet() ? "lightgreen" : "white";
+		if(this.goalMet()) {
+			return "lightgreen";
+		}
+		else if(this.isCurrentHour()) {
+			return "lightgray";
+		}
+		else {
+			return "white";
+		}
+	}
+
+	getStepString(): string {
+		return this.isFutureHour() ? '' : new Intl.NumberFormat().format(this.stepHour[1]);
 	}
 
 	getEmoji(): string {
