@@ -3,7 +3,7 @@ import * as moment from 'moment';
 import { Moment } from 'moment';
 import { PedometerService, iOSPedometerDataPoint } from "../services/pedometer.service";
 import { on, suspendEvent, resumeEvent, ApplicationEventData } from 'tns-core-modules/application';
-import { Subscription } from "rxjs";
+import { Subscription, interval } from "rxjs";
 
 @Component({
   selector: "Home",
@@ -13,7 +13,9 @@ import { Subscription } from "rxjs";
 export class HomeComponent implements OnInit {
   // This is an array of tuples. Google TypeScript tuples.
   stepHours: Array<[Moment, number]>;
+  stepHoursUi: Array<[Moment, number]>;
   private updatesSubscription: Subscription;
+  private intervalSubscription: Subscription;
   curViewDate: Date; // Midnight of the date currently being viewed
 
   constructor(private pedometerService: PedometerService, private changeDetectorRef: ChangeDetectorRef) {}
@@ -39,16 +41,25 @@ export class HomeComponent implements OnInit {
             if(element[0].isSame(moment(resp.startDate))) {
               element[1] = resp.steps;
               console.log(`Steps received: ${resp.steps}`);
-              this.changeDetectorRef.detectChanges();
             }
           });
         }
+      );
+    }
+
+    // WARNING: Horrible hack
+    // Unfortunately I have to use this until I get an answer to this question:
+    // https://stackoverflow.com/questions/53693956/delay-with-property-binding-in-nativescript-angular-app
+    if(!this.intervalSubscription || this.intervalSubscription.closed) {
+      this.intervalSubscription = interval(1000).subscribe(
+        () => this.stepHoursUi = this.stepHours
       );
     }
   }
 
   unsubscribeFromPedometerUpdates(): void {
     this.updatesSubscription.unsubscribe();
+    this.intervalSubscription.unsubscribe();
   }
 
   registerApplicationEvents(): void {
