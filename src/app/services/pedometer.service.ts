@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { Pedometer } from "nativescript-pedometer";
+import { Pedometer, PedometerUpdate } from "nativescript-pedometer";
 import { Observable, from, merge } from "rxjs";
 import * as moment from 'moment';
 import { Moment } from 'moment';
@@ -15,7 +15,7 @@ export class PedometerService {
     this._pedometer = new Pedometer();
   }
 
-  queryDay(date: Moment): Observable<iOSPedometerDataPoint> {
+  queryDay(date: Moment): Observable<PedometerUpdate> {
     let startOfDay: Moment = moment(date).startOf('day');
     let obsArray = new Array<Observable<any>>();
 
@@ -29,14 +29,14 @@ export class PedometerService {
     return merge(...obsArray);
   }
 
-  startUpdates(): Observable<iOSPedometerDataPoint> {
+  startUpdates(): Observable<PedometerUpdate> {
     return Observable.create((observer) => {
       this._pedometer.startUpdates({
         fromDate: moment().startOf('hour').toDate(),
 
         // Reason for the weird Promise.resolve() thing: 
         // https://stackoverflow.com/a/53695942/400765
-        onUpdate: (result: iOSPedometerDataPoint) => Promise.resolve().then(
+        onUpdate: (result: PedometerUpdate) => Promise.resolve().then(
           () => observer.next(result)
         )
       });
@@ -45,16 +45,4 @@ export class PedometerService {
       return () => this._pedometer.stopUpdates();
     });
   }
-}
-
-export interface iOSPedometerDataPoint {
-  startDate: Date;
-  endDate: Date;
-  steps: number;
-  distance: number;
-  floorsAscended: number;
-  floorsDescended: number;
-  currentPace: number;
-  currentCadence: number;
-  averageActivePace: number;
 }

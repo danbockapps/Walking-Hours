@@ -1,9 +1,10 @@
 import { Component, OnInit, ChangeDetectorRef } from "@angular/core";
 import * as moment from 'moment';
 import { Moment } from 'moment';
-import { PedometerService, iOSPedometerDataPoint } from "../services/pedometer.service";
+import { PedometerService } from "../services/pedometer.service";
 import { on, suspendEvent, resumeEvent, ApplicationEventData } from 'tns-core-modules/application';
 import { Subscription, interval } from "rxjs";
+import { PedometerUpdate } from "nativescript-pedometer";
 
 @Component({
   selector: "Home",
@@ -23,7 +24,7 @@ export class HomeComponent implements OnInit {
     this.curViewDate = moment().startOf('day').toDate();
     this.stepHours = [];
     this.pedometerService.queryDay(moment()).subscribe(
-      (response:iOSPedometerDataPoint) => {
+      (response: PedometerUpdate) => {
         this.stepHours.push([moment(response.startDate), response.steps]);
       }
     );
@@ -35,7 +36,7 @@ export class HomeComponent implements OnInit {
   subscribeToPedometerUpdates(): void {
     if(!this.updatesSubscription || this.updatesSubscription.closed) {
       this.updatesSubscription = this.pedometerService.startUpdates().subscribe(
-        (resp: iOSPedometerDataPoint) => {
+        (resp: PedometerUpdate) => {
           this.stepHours.forEach((element: [Moment, number]) => {
             if(element[0].isSame(moment(resp.startDate))) {
               element[1] = resp.steps;
