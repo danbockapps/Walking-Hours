@@ -33,9 +33,12 @@ export class PedometerService {
     return Observable.create((observer) => {
       this._pedometer.startUpdates({
         fromDate: moment().startOf('hour').toDate(),
-        onUpdate: (result: iOSPedometerDataPoint) => {
-          observer.next(result);
-        }
+
+        // Reason for the weird Promise.resolve() thing: 
+        // https://stackoverflow.com/a/53695942/400765
+        onUpdate: (result: iOSPedometerDataPoint) => Promise.resolve().then(
+          () => observer.next(result)
+        )
       });
 
       // This gets run when the observable is unsubscribed from
