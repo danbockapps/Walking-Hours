@@ -14,7 +14,6 @@ import { PedometerUpdate } from "nativescript-pedometer";
 export class HomeComponent implements OnInit {
   // This is an array of tuples. Google TypeScript tuples.
   stepHours: Array<[Moment, number]>;
-  stepHoursUi: Array<[Moment, number]>;
   private updatesSubscription: Subscription;
   curViewDate: Date; // Midnight of the date currently being viewed
 
@@ -35,17 +34,21 @@ export class HomeComponent implements OnInit {
 
   subscribeToPedometerUpdates(): void {
     if(!this.updatesSubscription || this.updatesSubscription.closed) {
-      this.updatesSubscription = this.pedometerService.startUpdates().subscribe(
-        (resp: PedometerUpdate) => {
-          this.stepHours.forEach((element: [Moment, number]) => {
-            if(element[0].isSame(moment(resp.startDate))) {
-              element[1] = resp.steps;
-              console.log(`Steps received: ${resp.steps}`);
-              this.changeDetectorRef.detectChanges();
-            }
-          });
+      this.updatesSubscription = this.pedometerService.startUpdates().subscribe(this.collectPedometerUpdate);
+    }
+  }
+
+  // Adds steps from a PedometerUpdate into the stepsHours property
+  // Doing it this way with the = and the => makes it use the right "this".
+  collectPedometerUpdate = (resp: PedometerUpdate) => {
+    if(this.stepHours) {
+      this.stepHours.forEach((element: [Moment, number]) => {
+        if(element[0].isSame(moment(resp.startDate))) {
+          element[1] = resp.steps;
+          console.log(`Steps received: ${resp.steps}`);
+          this.changeDetectorRef.detectChanges();
         }
-      );
+      });
     }
   }
 

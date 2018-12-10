@@ -23,7 +23,7 @@ export class HourComponent implements OnInit {
 	ngOnInit() { }
 
 	isCurrentHour(): boolean {
-		return parseInt(this.stepHour[0].format('H')) === parseInt(moment().format('H'));
+		return this.stepHour[0].format('H') === moment().format('H');
 	}
 
 	isFutureHour(): boolean {
