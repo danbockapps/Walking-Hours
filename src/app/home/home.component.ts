@@ -43,10 +43,20 @@ export class HomeComponent implements OnInit {
     this.stepHours[moment(resp.startDate).unix()] = resp.steps;
   }
 
+  // startUpdates is on a different thread, so detectChanges has to be called
   collectUpdateAndRefresh = (resp: PedometerUpdate) => {
-    this.collectUpdate(resp);
-    console.log(`Steps received: ${resp.steps}`);
-    this.changeDetectorRef.detectChanges();
+    if(moment().startOf('hour').isSame(resp.startDate)) {
+      // It's still the same hour it was when the updates started
+      this.collectUpdate(resp);
+      console.log(`Steps received: ${resp.steps}`);
+      this.changeDetectorRef.detectChanges();
+    }
+    else {
+      // It's a new hour. Refresh!
+      this.unsubscribeFromPedometerUpdates();
+      this.queryDay(moment());
+      this.subscribeToPedometerUpdates();
+    }
   }
 
   unsubscribeFromPedometerUpdates(): void {
