@@ -64,11 +64,11 @@ export class HourComponent implements OnInit {
 	}
 
 	getEmoji(): string {
-		if(this.isFutureHour()) {
-		  return '';
-		}
-		else if(this.goalMet()) {
+		if(this.goalMet()) {
 			return this.databaseService.getEmojiShortName(this.stepHour[0].format('X'));
+		}
+		else if(this.isFutureHour() || this.isCurrentHour()) {
+			return '';
 		}
 		else if(this.stepHour[1] <= 1) {
 			return 'zzz';
