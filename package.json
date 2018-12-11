@@ -21,6 +21,7 @@
     "@angular/platform-browser": "~7.0.0",
     "@angular/platform-browser-dynamic": "~7.0.0",
     "@angular/router": "~7.0.0",
+    "lodash": "^4.17.11",
     "moment": "^2.22.2",
     "nativescript-angular": "~7.0.0",
     "nativescript-couchbase-plugin": "^0.5.0",
@@ -35,11 +36,12 @@
     "zone.js": "~0.8.18"
   },
   "devDependencies": {
-    "@nativescript/schematics": "~0.4.0",
-    "nativescript-dev-typescript": "~0.7.0",
-    "nativescript-dev-webpack": "~0.18.0",
     "@angular/compiler-cli": "~7.0.0",
-    "@ngtools/webpack": "~7.0.0"
+    "@nativescript/schematics": "~0.4.0",
+    "@ngtools/webpack": "~7.0.0",
+    "@types/lodash": "^4.14.119",
+    "nativescript-dev-typescript": "~0.7.0",
+    "nativescript-dev-webpack": "~0.18.0"
   },
   "readme": "NativeScript Application"
 }
