@@ -22,26 +22,29 @@ export class HomeComponent implements OnInit {
   ngOnInit(): void {
     this.curViewDate = moment().startOf('day').toDate();
     this.stepHours = {};
-    this.pedometerService.queryDay(moment()).subscribe(
-      (response: PedometerUpdate) => {
-        this.stepHours[moment(response.startDate).format('X')] = response.steps;
-      }
-    );
-
+    this.queryDay(moment());
     this.subscribeToPedometerUpdates();
     this.registerApplicationEvents();
   }
 
+  queryDay(day: Moment) {
+    this.pedometerService.queryDay(day).subscribe(this.collectUpdate);
+  }
+
   subscribeToPedometerUpdates(): void {
     if(!this.updatesSubscription || this.updatesSubscription.closed) {
-      this.updatesSubscription = this.pedometerService.startUpdates().subscribe(this.collectPedometerUpdate);
+      this.updatesSubscription = this.pedometerService.startUpdates().subscribe(this.collectUpdateAndRefresh);
     }
   }
 
   // Adds steps from a PedometerUpdate into the stepsHours property
   // Doing it this way with the = and the => makes it use the right "this".
-  collectPedometerUpdate = (resp: PedometerUpdate) => {
+  collectUpdate = (resp: PedometerUpdate) => {
     this.stepHours[moment(resp.startDate).unix()] = resp.steps;
+  }
+
+  collectUpdateAndRefresh = (resp: PedometerUpdate) => {
+    this.collectUpdate(resp);
     console.log(`Steps received: ${resp.steps}`);
     this.changeDetectorRef.detectChanges();
   }
@@ -56,6 +59,7 @@ export class HomeComponent implements OnInit {
     });
     
     on(resumeEvent, (args: ApplicationEventData) => {
+      this.queryDay(moment());
       this.subscribeToPedometerUpdates();
     });
   }
