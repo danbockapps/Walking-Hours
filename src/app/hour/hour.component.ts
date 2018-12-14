@@ -17,13 +17,15 @@ registerElement("Emoji", () => require("nativescript-emoji").Emoji);
 export class HourComponent implements OnInit {
 	// This is called a tuple. Google TypeScript tuples.
 	@Input() stepHour: [Moment, number];
+	@Input() wholeDay: boolean;
 
 	constructor(private databaseService: DatabaseService) { }
 
 	ngOnInit() { }
 
 	isCurrentHour(): boolean {
-		return this.stepHour[0].format('H') === moment().format('H');
+		const comp: Moment = this.wholeDay ? moment().startOf('day') : moment();
+		return this.stepHour[0].format('H') === comp.format('H');
 	}
 
 	isFutureHour(): boolean {
@@ -31,7 +33,12 @@ export class HourComponent implements OnInit {
 	}
 
 	getGoal(): number {
-		return 416;
+		if(this.wholeDay) {
+			return 10000;
+		}
+		else {
+			return 416;
+		}
 	}
 
 	goalMet(): boolean {
@@ -56,6 +63,15 @@ export class HourComponent implements OnInit {
 		}
 		else {
 			return "white";
+		}
+	}
+
+	getTimeString(): string {
+		if(this.wholeDay) {
+			return this.stepHour[0].format('L');
+		}
+		else {
+			return this.stepHour[0].format('ha');
 		}
 	}
 

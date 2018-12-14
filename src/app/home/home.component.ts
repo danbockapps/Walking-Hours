@@ -13,7 +13,8 @@ import * as _ from "lodash";
   templateUrl: "./home.component.html"
 })
 export class HomeComponent implements OnInit {
-  stepHours: StepHoursHash;
+  stepHours: StepTimeHash;
+  stepDays: StepTimeHash;
   private updatesSubscription: Subscription;
   curViewDate: Date; // Midnight of the date currently being viewed
 
@@ -22,6 +23,7 @@ export class HomeComponent implements OnInit {
   ngOnInit(): void {
     this.curViewDate = moment().startOf('day').toDate();
     this.stepHours = {};
+    this.stepDays = {};
     this.queryDay(moment());
     this.subscribeToPedometerUpdates();
     this.registerApplicationEvents();
@@ -41,6 +43,8 @@ export class HomeComponent implements OnInit {
   // Doing it this way with the = and the => makes it use the right "this".
   collectUpdate = (resp: PedometerUpdate) => {
     this.stepHours[moment(resp.startDate).unix()] = resp.steps;
+    this.stepDays[moment(this.curViewDate).unix()] = 
+        this.getTotalSteps(this.todaysStepHours(this.curViewDate));
   }
 
   // startUpdates is on a different thread, so detectChanges has to be called
@@ -48,7 +52,7 @@ export class HomeComponent implements OnInit {
     if(moment().startOf('hour').isSame(resp.startDate)) {
       // It's still the same hour it was when the updates started
       this.collectUpdate(resp);
-      console.log(`Steps received: ${resp.steps}`);
+      console.log(`Steps received: ${resp.steps} ${moment(resp.startDate).format('ha')}`);
       this.changeDetectorRef.detectChanges();
     }
     else {
@@ -74,7 +78,7 @@ export class HomeComponent implements OnInit {
     });
   }
 
-  todaysStepHours(curViewDate): Array<[Moment, number]> {
+  todaysStepHours(curViewDate: Date): Array<[Moment, number]> {
     // https://blog.mariusschulz.com/2015/05/14/implicit-function-chains-in-lodash
     // pickBy filters this.stepHours down to only the elements in curViewDate
     // mapValues returns an obj with both key (moment) and value (steps) in the value
@@ -89,8 +93,18 @@ export class HomeComponent implements OnInit {
     return returnable;
   }
 
+  getTotalSteps(hoursArray: Array<[Moment, number]>): number {
+    return hoursArray.reduce(
+      (accumulator: number, element: [Moment, number]) => accumulator + element[1]
+    , 0);
+  }
+
+  getWholeDayStepHour(curViewDate: Date): [Moment, number] {
+    return [moment(curViewDate), this.stepDays[moment(curViewDate).unix()]];
+  }
+
   rowNum(stepHour: [Moment, number]): number {
-    let returnable: number = parseInt(stepHour[0].format('H')) % 12;
+    let returnable: number = parseInt(stepHour[0].format('H')) % 12 + 1;
     return returnable;
   }
 
@@ -100,7 +114,7 @@ export class HomeComponent implements OnInit {
   }
 }
 
-interface StepHoursHash {
+interface StepTimeHash {
   // Index is the unix timestamp of the start of an hour.
   // Value is the number of steps for that hour.
 

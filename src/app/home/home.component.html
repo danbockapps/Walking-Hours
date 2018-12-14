@@ -2,11 +2,15 @@
   <Label class="action-bar-title" text="Walking Hours 🚶‍♀️ 🚶‍♂️"></Label>
 </ActionBar>
 
-<GridLayout rows="*, *, *, *, *, *, *, *, *, *, *, *" columns="*, 1, *">
+<GridLayout rows="*, *, *, *, *, *, *, *, *, *, *, *, *" columns="*, 1, *">
+  <StackLayout colSpan="3" row="0" colSpan="3">
+      <walk-hour wholeDay="true" [stepHour]="getWholeDayStepHour(curViewDate)"></walk-hour>
+  </StackLayout>
+  
   <StackLayout *ngFor="let stepHour of todaysStepHours(curViewDate)" [row]="rowNum(stepHour)" [col]="colNum(stepHour)">
     <walk-hour [stepHour]="stepHour"></walk-hour>
   </StackLayout>
 
   <!-- Center divider -->
-  <Label rowSpan="12" col="1" backgroundColor="black"></Label>
+  <Label rowSpan="12" col="1" row="1" backgroundColor="black"></Label>
 </GridLayout>
