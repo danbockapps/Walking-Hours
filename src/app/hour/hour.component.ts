@@ -4,6 +4,7 @@ import { registerElement } from "nativescript-angular/element-registry";
 import moment = require('moment');
 import { DatabaseService } from '../services/database.service';
 registerElement("Emoji", () => require("nativescript-emoji").Emoji);
+import { trigger, transition, group, query, style, animate } from "@angular/animations";
 
 @Component({
 	moduleId: module.id,
@@ -11,7 +12,17 @@ registerElement("Emoji", () => require("nativescript-emoji").Emoji);
 	// https://angular.io/guide/styleguide#component-custom-prefix
 	selector: 'walk-hour',
 	templateUrl: './hour.component.html',
-	styleUrls: ['./hour.component.css']
+	styleUrls: ['./hour.component.css'],
+	animations: [
+    trigger('slider', [
+      transition(
+        ':enter', [
+          style({transform: 'translateY(20)', opacity: 0}),
+          animate('500ms cubic-bezier(.29,.83,1,.53)', style({transform: 'translateY(0)', opacity: 1}))
+        ]
+      )
+    ])
+  ]
 })
 
 export class HourComponent implements OnInit {
