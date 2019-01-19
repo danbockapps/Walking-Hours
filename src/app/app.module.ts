@@ -3,7 +3,6 @@ import { NativeScriptModule } from "nativescript-angular/nativescript.module";
 
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
-import { NativeScriptAnimationsModule } from "nativescript-angular/animations";
 
 @NgModule({
     bootstrap: [
@@ -11,8 +10,7 @@ import { NativeScriptAnimationsModule } from "nativescript-angular/animations";
     ],
     imports: [
         NativeScriptModule,
-        AppRoutingModule,
-        NativeScriptAnimationsModule
+        AppRoutingModule
     ],
     declarations: [
         AppComponent
