@@ -46,11 +46,14 @@ export class HourComponent implements OnInit {
 	}
 
 	getWidth(): string {
-		if(this.isCurrentHour()) {
-			return Math.min(100, this.stepHour[1] * 100 / this.getGoal()) + '%';
+		if(!this.stepHour[1]) {
+			return '0%';
+		}
+		else if(!this.isCurrentHour()) {
+			return '100%';
 		}
 		else {
-			return '100%';
+			return Math.min(100, this.stepHour[1] * 100 / this.getGoal()) + '%';
 		}
 	}
 
