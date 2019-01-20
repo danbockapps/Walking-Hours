@@ -2,5 +2,5 @@
   <Label colSpan="3" class="bg" [background]="getBackgroundColor()" [width]="getWidth()"></Label>
   <Label col="0" class="hour" [text]="getTimeString()"></Label>
   <Emoji:Emoji col="1" class="emoji" [name]="getEmoji()" />
-  <Label col="2" class="steps" [text]="getStepString()"></Label>
+  <Label col="2" class="steps" [text]="stepHour[1]|number" *ngIf="!isFutureHour()"></Label>
 </GridLayout>

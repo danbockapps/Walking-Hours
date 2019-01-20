@@ -78,10 +78,6 @@ export class HourComponent implements OnInit {
 		}
 	}
 
-	getStepString(): string {
-		return this.isFutureHour() ? '' : new Intl.NumberFormat().format(this.stepHour[1]);
-	}
-
 	getEmoji(): string {
 		if(this.goalMet()) {
 			return this.databaseService.getEmojiShortName(this.stepHour[0].format('X'));
