@@ -6,6 +6,8 @@ import { HomeComponent } from "./home.component";
 import { HourComponent } from "../hour/hour.component";
 import { DatabaseService } from "../services/database.service";
 import { PedometerService } from "../services/pedometer.service";
+import { HourPipe } from "../pipes/hour.pipe";
+import { DayPipe } from "../pipes/day.pipe";
 
 @NgModule({
     imports: [
@@ -14,7 +16,9 @@ import { PedometerService } from "../services/pedometer.service";
     ],
     declarations: [
         HomeComponent,
-        HourComponent
+        HourComponent,
+        DayPipe,
+        HourPipe
     ],
     schemas: [
         NO_ERRORS_SCHEMA

@@ -69,15 +69,6 @@ export class HourComponent implements OnInit {
 		}
 	}
 
-	getTimeString(): string {
-		if(this.wholeDay) {
-			return this.stepHour[0].format('L');
-		}
-		else {
-			return this.stepHour[0].format('ha');
-		}
-	}
-
 	getEmoji(): string {
 		if(this.goalMet()) {
 			return this.databaseService.getEmojiShortName(this.stepHour[0].format('X'));
